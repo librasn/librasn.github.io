@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito+Sans:200,300,400,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cirrus-ui/dist/cirrus.min.css">
+    <title>rasn compiler</title>
+
+<body>
+    <script src="wasm_rustfmt.js"></script>
+    <script type="module">
+        import init, { compile } from './rasn_compiler.js';
+
+        init();
+        wasm_bindgen('./wasm_rustfmt_bg.wasm');
+
+        const runButton = document.getElementById("run-compiler");
+        const asnOut = document.getElementById("asn-output");
+        const asnConsole = document.getElementById("asn-console");
+        const clipboardAlert = document.getElementById("clipboard-alert");
+
+        runButton.addEventListener('click', runCompiler);
+        asnOut.addEventListener("dblclick", () => copyToClipboard(asnOut.value));
+        asnConsole.addEventListener("dblclick", () => copyToClipboard(asnConsole.value));
+
+        function runCompiler() {
+            try {
+                const result = compile(document.getElementById("asn-input").value);
+                const formatted = wasm_bindgen.rustfmt(result.rust);
+                const err = formatted.error();
+                let code;
+                if (err) {
+                    result.warnings = "WARN: Failed to format generated rust code.\n" + result.warnings
+                    code = result.rust;
+                } else {
+                    code = formatted.code()
+                }
+                document.getElementById("asn-output").value = code;
+                if (result.warnings.length === 0) {
+                    document.getElementById("asn-console").style.backgroundColor = "#e1e9b7";
+                } else {
+                    document.getElementById("asn-console").style.backgroundColor = "#fffee0";
+                }
+                document.getElementById("asn-console").value = result.warnings;
+            } catch (e) {
+                document.getElementById("asn-console").value = e;
+                document.getElementById("asn-console").style.backgroundColor = "#f96161";
+            }
+        }
+
+        let timerHook;
+
+        function copyToClipboard(text) {
+            clearTimeout(timerHook);
+            clipboardAlert.style.visibility = "hidden";
+            navigator.clipboard.writeText(text);
+            clipboardAlert.style.visibility = "visible";
+            timerHook = setTimeout(() => {
+                clipboardAlert.style.visibility = "hidden";
+            }, 3000);
+        }
+    </script>
+
+    <div class="header header-fixed unselectable header-animated">
+        <div class="header-brand">
+            <div class="nav-item no-hover">
+                <h4 class="subtitle font-bold">rasn compiler</h4>
+            </div>
+            <div class="nav-item">
+                <a href="https://github.com/6d7a/rasn-compiler">
+                    <span class="icon">
+                        <i class="fab fa-wrapper fa-github"></i>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="header-nav" id="header-menu" role="button">
+            <div class="nav-right">
+                <div class="nav-item text-center no-hover">
+                    <blockquotes class="text-gray-600">generating <a href="https://github.com/XAMPPRocky/rasn"
+                            target="_blank" class="px-0 text-green-400" style="display: inline;">rasn</a>
+                        representations for ASN.1 data types</blockquotes>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="nav-item text-center bg-green-400">
+                    <a>
+                        <h4 id="run-compiler" class="subtitle font-bold text-light hover-grow"
+                            style="visibility: visible;">compile</h3>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section class="section">
+        <div class="hero fullscreen">
+            <div class="hero-body">
+                <div class="grid u-gap-2 min-h-100p w-screen pt-4 grid-rows-6">
+                    <div class="grid-c-6 grid-r-5" style="grid-column: 1/7; grid-row: 1/6;">
+                        <textarea type="text" class="min-h-100p" id="asn-input"
+                            style="resize: none; font-family: monospace; overflow: scroll; white-space: nowrap;"
+                            placeholder="Paste your ASN.1 here"></textarea>
+                    </div>
+                    <div class="grid-c-6 grid-r-5 tooltip" data-tooltip="Double-click to copy to clipboard">
+                        <textarea type="text" class="min-h-100p" id="asn-output"
+                            style="resize: none; font-family: monospace; overflow: scroll; white-space: pre-wrap;"
+                            placeholder="Your rasn code will appear here" readonly></textarea>
+                    </div>
+                    <div class="grid-c-12 grid-r-1 tooltip" data-tooltip="Double-click to copy to clipboard">
+                        <textarea type="text" class="min-h-100p" id="asn-console"
+                            style="resize: none; font-family: monospace; overflow-y: scroll;"
+                            placeholder="Compiler warnings and errors appear here" readonly></textarea>
+                    </div>
+                </div>
+                <div id="clipboard-alert" class="w-20p toast toast--gray u-absolute animated bounceIn"
+                    style="visibility: hidden; bottom: 0.5rem; right: 0.5rem;">
+                    <p>Copied to clipboard</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
