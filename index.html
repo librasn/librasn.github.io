@@ -19,10 +19,12 @@
         wasm_bindgen('./wasm_rustfmt_bg.wasm');
 
         const runButton = document.getElementById("run-compiler");
+        const runButtonMobile = document.getElementById("run-compiler-mobile");
         const asnOut = document.getElementById("asn-output");
         const asnConsole = document.getElementById("asn-console");
         const clipboardAlert = document.getElementById("clipboard-alert");
 
+        runButtonMobile.addEventListener('click', runCompiler);
         runButton.addEventListener('click', runCompiler);
         asnOut.addEventListener("dblclick", () => copyToClipboard(asnOut.value));
         asnConsole.addEventListener("dblclick", () => copyToClipboard(asnConsole.value));
@@ -99,18 +101,20 @@
     <section class="section">
         <div class="hero fullscreen">
             <div class="hero-body">
-                <div class="grid u-gap-2 min-h-100p w-screen pt-4 grid-rows-6">
-                    <div class="grid-c-6 grid-r-5" style="grid-column: 1/7; grid-row: 1/6;">
-                        <textarea type="text" class="min-h-100p" id="asn-input"
+                <div class="grid u-gap-2 min-h-100p w-screen pt-4 grid-rows-12">
+                    <button class="grid-r-1 grid-c-12 w-100p u-none-md bg-green-400 my-0"><h5 id="run-compiler-mobile" class="u-center subtitle font-bold text-light hover-grow"
+                        style="visibility: visible;">compile</h5></button>
+                    <div class="grid-c-12 grid-r-4 grid-c-6-md grid-r-5-md">
+                        <textarea type="text" class="min-h-100p text-xs leading-tighter" id="asn-input"
                             style="resize: none; font-family: monospace; overflow: scroll; white-space: nowrap;"
                             placeholder="Paste your ASN.1 here"></textarea>
                     </div>
-                    <div class="grid-c-6 grid-r-5 tooltip" data-tooltip="Double-click to copy to clipboard">
-                        <textarea type="text" class="min-h-100p" id="asn-output"
+                    <div class="grid-c-12 grid-r-5 grid-c-6-md grid-r-5-md tooltip" data-tooltip="Double-click to copy to clipboard">
+                        <textarea type="text" class="min-h-100p text-xs leading-tighter" id="asn-output"
                             style="resize: none; font-family: monospace; overflow: scroll; white-space: pre-wrap;"
                             placeholder="Your rasn code will appear here" readonly></textarea>
                     </div>
-                    <div class="grid-c-12 grid-r-1 tooltip" data-tooltip="Double-click to copy to clipboard">
+                    <div class="grid-c-12 grid-r-2 tooltip" data-tooltip="Double-click to copy to clipboard">
                         <textarea type="text" class="min-h-100p" id="asn-console"
                             style="resize: none; font-family: monospace; overflow-y: scroll;"
                             placeholder="Compiler warnings and errors appear here" readonly></textarea>
