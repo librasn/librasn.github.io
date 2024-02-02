@@ -17,7 +17,7 @@ jobs:
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
       - name: Checkout Compiler
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           repository: librasn/compiler
           path: compiler
@@ -36,7 +36,7 @@ jobs:
           wasm-bindgen --out-dir $HOME --target web --no-typescript ./target/wasm32-unknown-unknown/release/rasn_compiler.wasm
 
       - name: Checkout Pages Src
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           ref: main
           path: web
@@ -50,4 +50,4 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "chore: release $RELEASE_VERSION"
-          git push origin/main
+          git push
