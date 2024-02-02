@@ -13,19 +13,21 @@ jobs:
       contents: write
 
     steps:
-      - name: Set tag variable
+      - name: Set Tag Variable
         run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - name: Checkout compiler
+      - name: Checkout Compiler
         uses: actions/checkout@v2
         with:
           repository: librasn/compiler
 
-      - name: Build for WASM
+      - name: Install Rust Toolchain
         uses: actions-rs/toolchain@v1
         with:
             toolchain: stable
             target: wasm32-unknown-unknown
+            
+      - name: Build for WASM
         run: |
           cd compiler
           cargo build -p rasn-compiler --target wasm32-unknown-unknown --release    
@@ -33,11 +35,14 @@ jobs:
           wasm-bindgen --out-dir $HOME --target web --no-typescript ./target/wasm32-unknown-unknown/release/rasn_compiler.wasm
           cd ..
 
-      - name: Checkout pages src
+      - name: Checkout Pages Src
         uses: actions/checkout@v2
         with:
           path: web
+        
+      - name: Push WASM Updates  
         run: |
+          cd web
           mv $HOME/rasn_compiler_bg.wasm ./rasn_compiler_bg.wasm
           mv $HOME/rasn_compiler.js ./rasn_compiler.js
           git config user.name github-actions
