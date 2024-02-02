@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Update
 
 on:
   push:
@@ -20,6 +20,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: librasn/compiler
+          path: compiler
 
       - name: Install Rust Toolchain
         uses: actions-rs/toolchain@v1
@@ -28,12 +29,11 @@ jobs:
             target: wasm32-unknown-unknown
             
       - name: Build for WASM
+        working-directory: ./compiler
         run: |
-          cd compiler
           cargo build -p rasn-compiler --target wasm32-unknown-unknown --release    
           cargo install wasm-bindgen-cli
           wasm-bindgen --out-dir $HOME --target web --no-typescript ./target/wasm32-unknown-unknown/release/rasn_compiler.wasm
-          cd ..
 
       - name: Checkout Pages Src
         uses: actions/checkout@v2
@@ -41,8 +41,8 @@ jobs:
           path: web
         
       - name: Push WASM Updates  
+        working-directory: ./web
         run: |
-          cd web
           mv $HOME/rasn_compiler_bg.wasm ./rasn_compiler_bg.wasm
           mv $HOME/rasn_compiler.js ./rasn_compiler.js
           git config user.name github-actions
