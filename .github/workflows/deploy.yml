@@ -38,6 +38,7 @@ jobs:
       - name: Checkout Pages Src
         uses: actions/checkout@v2
         with:
+          ref: main
           path: web
         
       - name: Push WASM Updates  
@@ -49,4 +50,4 @@ jobs:
           git config user.email github-actions@github.com
           git add .
           git commit -m "chore: release $RELEASE_VERSION"
-          git push
+          git push origin/main
