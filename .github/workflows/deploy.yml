@@ -32,7 +32,7 @@ jobs:
         working-directory: ./compiler
         run: |
           cargo build -p rasn-compiler --target wasm32-unknown-unknown --release    
-          cargo install -f wasm-bindgen-cli --version 0.2.90
+          cargo install -f wasm-bindgen-cli --version 0.2.92
           wasm-bindgen --out-dir $HOME --target web --no-typescript ./target/wasm32-unknown-unknown/release/rasn_compiler.wasm
 
       - name: Checkout Pages Src
