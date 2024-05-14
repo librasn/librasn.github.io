@@ -31,7 +31,7 @@
 
         function runCompiler() {
             try {
-                const result = compile(document.getElementById("asn-input").value);
+                const result = compile(document.getElementById("asn-input").value, "rasn");
                 const formatted = wasm_bindgen.rustfmt(result.rust);
                 const err = formatted.error();
                 let code;
