@@ -1,5 +1,0 @@
-{
-    "yaml.schemas": {
-        "https://json.schemastore.org/github-workflow.json": "file:///Users/kevinwestphal/Documents/code/utils/rasn-compiler-online/.github/workflows/deploy.yml"
-    }
-}

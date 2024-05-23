@@ -1,1 +1,6 @@
-// place files you want to import through the `$lib` alias in this folder.
+export {
+	default as init,
+	Config as RasnConfig,
+	compile_to_rust,
+	compile_to_typescript
+} from './compiler/rasn_compiler';
