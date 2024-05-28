@@ -27,17 +27,18 @@ jobs:
           toolchain: '1.77.2'
           target: wasm32-unknown-unknown
 
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
       - name: Checkout Pages Src
         uses: actions/checkout@v4
         with:
           ref: main
           path: $HOME/web
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: $HOME/web/package-lock.json
 
       - name: Build for WASM
         working-directory: $HOME/compiler
