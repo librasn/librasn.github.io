@@ -1,9 +1,21 @@
-<script>
+<script lang="ts">
 	import '../app.css';
-	import { AppBar, RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
+	import { AppBar, RadioGroup, RadioItem, type ModalSettings } from '@skeletonlabs/skeleton';
 	import { Bindings, load, compilerState } from '$lib/compilerState';
 	import { onMount } from 'svelte';
 	import { init } from '$lib';
+	import { initializeStores, Modal } from '@skeletonlabs/skeleton';
+	import { getModalStore } from '@skeletonlabs/skeleton';
+	import Settings from '$lib/components/Settings.svelte';
+
+	initializeStores();
+	const modalStore = getModalStore();
+	const modalComponent = { ref: Settings };
+
+	const modal: ModalSettings = {
+		type: 'component',
+		component: modalComponent
+	};
 
 	onMount(() => {
 		init();
@@ -14,6 +26,7 @@
 </script>
 
 <div class="flex h-dvh flex-col">
+	<Modal />
 	<AppBar gridColumns="grid-cols-3" slotDefault="place-self-center" slotTrail="place-content-end">
 		<img
 			class="bar-title"
@@ -40,7 +53,7 @@
 					>typescript</RadioItem
 				>
 			</RadioGroup>
-			<span class="badge-icon ml-4 self-center"
+			<span class="badge-icon ml-4 self-center" on:click={() => modalStore.trigger(modal)}
 				><svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"

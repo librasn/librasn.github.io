@@ -6,7 +6,6 @@
 	import * as estreePlugin from 'prettier/plugins/estree';
 	import { onDestroy } from 'svelte';
 
-	let backend: Bindings;
 	let bindings = '';
 	let errors = '';
 
@@ -60,30 +59,26 @@
 	};
 
 	let unsubscribe = compilerState.subscribe((s) => {
-		if (s.language !== backend) {
-			backend = s.language;
-			bufferedCompile();
-		}
+		bufferedCompile();
 	});
 
 	onDestroy(unsubscribe);
 </script>
 
 <div
-	class="grid flex-grow grid-cols-1 grid-rows-12 content-stretch justify-stretch gap-2 sm:grid-cols-2"
+	class="grid flex-grow grid-cols-1 grid-rows-12 sm:content-stretch sm:justify-stretch gap-2 sm:grid-cols-2"
 	style="padding: 0.4rem;"
 >
-	<div class="tooltip flex sm:row-span-10" data-tooltip="Double-click to copy to clipboard">
+	<div class="flex row-span-5 sm:row-span-10">
 		<textarea
 			class="textarea flex-1 rounded-md"
 			placeholder="Paste your ASN.1 here"
 			bind:value={$compilerState.input}
-			on:input={bufferedCompile}
 		/>
 	</div>
-	<div class="flex sm:row-span-10">
+	<div class="flex row-span-5 sm:row-span-10">
 		<textarea
-			class="has-tooltip textarea flex-1 rounded-md"
+			class="textarea flex-1 rounded-md"
 			style="overflow: scroll; resize: none;"
 			readonly
 			placeholder="Your generated bindings will appear here"
@@ -91,8 +86,7 @@
 		/>
 	</div>
 	<div
-		class="tooltip flex sm:col-span-2 sm:row-span-2"
-		data-tooltip="Double-click to copy to clipboard"
+		class="flex row-span-2 sm:col-span-2 sm:row-span-2"
 	>
 		<textarea
 			class="textarea flex-1 rounded-md"
