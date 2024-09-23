@@ -33,6 +33,10 @@ function addHeapObject(obj) {
     return idx;
 }
 
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
 let cachedInt32Memory0 = null;
 
 function getInt32Memory0() {
@@ -236,11 +240,35 @@ export class Config {
         wasm.__wbg_set_config_default_wildcard_imports(this.__wbg_ptr, arg0);
     }
     /**
+    * To make working with the generated types a bit more ergonomic, the compiler
+    * can generate `From` impls for the wrapper inner types in a `CHOICE`, as long
+    * as the generated impls are not ambiguous.
+    * This is disabled by default to generate less code, but can be enabled with
+    * `generate_from_impls` set to `true`.
+    * @returns {boolean}
+    */
+    get generate_from_impls() {
+        const ret = wasm.__wbg_get_config_generate_from_impls(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
+    * To make working with the generated types a bit more ergonomic, the compiler
+    * can generate `From` impls for the wrapper inner types in a `CHOICE`, as long
+    * as the generated impls are not ambiguous.
+    * This is disabled by default to generate less code, but can be enabled with
+    * `generate_from_impls` set to `true`.
+    * @param {boolean} arg0
+    */
+    set generate_from_impls(arg0) {
+        wasm.__wbg_set_config_generate_from_impls(this.__wbg_ptr, arg0);
+    }
+    /**
     * @param {boolean} opaque_open_types
     * @param {boolean} default_wildcard_imports
+    * @param {boolean | undefined} [generate_from_impls]
     */
-    constructor(opaque_open_types, default_wildcard_imports) {
-        const ret = wasm.config_new(opaque_open_types, default_wildcard_imports);
+    constructor(opaque_open_types, default_wildcard_imports, generate_from_impls) {
+        const ret = wasm.config_new(opaque_open_types, default_wildcard_imports, isLikeNone(generate_from_impls) ? 0xFFFFFF : generate_from_impls ? 1 : 0);
         this.__wbg_ptr = ret >>> 0;
         return this;
     }

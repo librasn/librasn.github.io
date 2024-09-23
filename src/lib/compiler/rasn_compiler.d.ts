@@ -19,8 +19,9 @@ export class Config {
 /**
 * @param {boolean} opaque_open_types
 * @param {boolean} default_wildcard_imports
+* @param {boolean | undefined} [generate_from_impls]
 */
-  constructor(opaque_open_types: boolean, default_wildcard_imports: boolean);
+  constructor(opaque_open_types: boolean, default_wildcard_imports: boolean, generate_from_impls?: boolean);
 /**
 * The compiler will try to match module import dependencies of the ASN.1
 * module as close as possible, importing only those types from other modules
@@ -29,6 +30,14 @@ export class Config {
 * the wildcard `*` for each module that the input ASN.1 module imports from.
 */
   default_wildcard_imports: boolean;
+/**
+* To make working with the generated types a bit more ergonomic, the compiler
+* can generate `From` impls for the wrapper inner types in a `CHOICE`, as long
+* as the generated impls are not ambiguous.
+* This is disabled by default to generate less code, but can be enabled with
+* `generate_from_impls` set to `true`.
+*/
+  generate_from_impls: boolean;
 /**
 * ASN.1 Open Types are represented as the `rasn::types::Any` type,
 * which holds a binary `content`. If `opaque_open_types` is `false`,
@@ -70,7 +79,9 @@ export interface InitOutput {
   readonly __wbg_set_config_opaque_open_types: (a: number, b: number) => void;
   readonly __wbg_get_config_default_wildcard_imports: (a: number) => number;
   readonly __wbg_set_config_default_wildcard_imports: (a: number, b: number) => void;
-  readonly config_new: (a: number, b: number) => number;
+  readonly __wbg_get_config_generate_from_impls: (a: number) => number;
+  readonly __wbg_set_config_generate_from_impls: (a: number, b: number) => void;
+  readonly config_new: (a: number, b: number, c: number) => number;
   readonly __wbg_generated_free: (a: number) => void;
   readonly __wbg_get_generated_rust: (a: number, b: number) => void;
   readonly __wbg_set_generated_rust: (a: number, b: number, c: number) => void;
