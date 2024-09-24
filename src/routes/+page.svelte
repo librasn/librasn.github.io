@@ -18,9 +18,10 @@
 
 	const compile = async () => {
 		try {
-			let { input, opaqueOpenTypes, defaultWildcardImports, language } = $compilerState;
+			let { input, opaqueOpenTypes, defaultWildcardImports, generateFromImpls, language } =
+				$compilerState;
 			if (input.length === 0) return;
-			const config = new Config(opaqueOpenTypes, defaultWildcardImports);
+			const config = new Config(opaqueOpenTypes, defaultWildcardImports, generateFromImpls);
 			if (language === Bindings.Rasn) {
 				compileToRust(input, config);
 			} else {
@@ -66,17 +67,17 @@
 </script>
 
 <div
-	class="grid flex-grow grid-cols-1 grid-rows-12 sm:content-stretch sm:justify-stretch gap-2 sm:grid-cols-2"
+	class="grid flex-grow grid-cols-1 grid-rows-12 gap-2 sm:grid-cols-2 sm:content-stretch sm:justify-stretch"
 	style="padding: 0.4rem;"
 >
-	<div class="flex row-span-5 sm:row-span-10">
+	<div class="row-span-5 flex sm:row-span-10">
 		<textarea
 			class="textarea flex-1 rounded-md"
 			placeholder="Paste your ASN.1 here"
 			bind:value={$compilerState.input}
 		/>
 	</div>
-	<div class="flex row-span-5 sm:row-span-10">
+	<div class="row-span-5 flex sm:row-span-10">
 		<textarea
 			class="textarea flex-1 rounded-md"
 			style="overflow: scroll; resize: none;"
@@ -85,9 +86,7 @@
 			value={bindings}
 		/>
 	</div>
-	<div
-		class="flex row-span-2 sm:col-span-2 sm:row-span-2"
-	>
+	<div class="row-span-2 flex sm:col-span-2 sm:row-span-2">
 		<textarea
 			class="textarea flex-1 rounded-md"
 			style="overflow: scroll-y; resize: none;"

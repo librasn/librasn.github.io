@@ -40,9 +40,20 @@
 				<blockquote class="blockquote">
 					The compiler will try to match module import dependencies of the ASN.1 module as close as
 					possible, importing only those types from other modules that are imported in the ASN.1
-					module. If this setting is set to <code class="code">true</code> , the compiler will instead
-					always import the entire module using the wildcard <code class="code">*</code> for each module that the input
-					ASN.1 module imports from.
+					module. If this setting is set to <code class="code">true</code> , the compiler will
+					instead always import the entire module using the wildcard <code class="code">*</code> for
+					each module that the input ASN.1 module imports from.
+				</blockquote>
+			</div>
+			<div class="flex flex-row">
+				<span>Generate <code class="code">From</code>-Impls</span>
+				<SlideToggle name="slide" class="ml-4" bind:checked={$compilerState.generateFromImpls} />
+			</div>
+			<div class="flex flex-row">
+				<blockquote class="blockquote">
+					The compiler will generate <code class="code">From</code>-Impls for
+					<code class="code">CHOICE</code> bindings, so that types of
+					<code class="code">CHOICE</code> options can be easily converted.
 				</blockquote>
 			</div>
 		</form>

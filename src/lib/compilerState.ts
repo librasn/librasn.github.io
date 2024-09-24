@@ -9,6 +9,7 @@ interface CompilerState {
 	input: string;
 	opaqueOpenTypes: boolean;
 	defaultWildcardImports: boolean;
+	generateFromImpls: boolean;
 	language: Bindings;
 }
 
@@ -16,6 +17,7 @@ const DEFAULT = {
 	input: '',
 	opaqueOpenTypes: true,
 	defaultWildcardImports: false,
+	generateFromImpls: false,
 	language: Bindings.Rasn
 };
 
