@@ -1,0 +1,47 @@
+name: Deploy to GitHub Pages
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Compiler
+        uses: actions/checkout@v4
+        with:
+          repository: librasn/compiler
+          path: $HOME/compiler
+
+      - name: Checkout Pages Src
+        uses: actions/checkout@v4
+        with:
+          path: $HOME/web
+
+      - name: Install Rust Toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: wasm32-unknown-unknown
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: $HOME/web/package-lock.json
+
+      - name: Build for WASM
+        working-directory: $HOME/compiler
+        run: |
+          cargo build -p rasn-compiler --target wasm32-unknown-unknown --release    
+          cargo install -f wasm-bindgen-cli --version 0.2.92
+          wasm-bindgen --out-dir $HOME/web/src/lib/compiler --target web ./target/wasm32-unknown-unknown/release/rasn_compiler.wasm
+
+      - name: Install Page Dependencies
+        working-directory: $HOME/web
+        run: npm install
+
+      - name: Build Page
+        working-directory: $HOME/web
+        run: npm run build
+
