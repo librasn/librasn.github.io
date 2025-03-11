@@ -11,6 +11,8 @@ interface CompilerState {
 	defaultWildcardImports: boolean;
 	generateFromImpls: boolean;
 	language: Bindings;
+	customImports: string[];
+	typeAnnotations: string[];
 }
 
 const DEFAULT = {
@@ -18,7 +20,9 @@ const DEFAULT = {
 	opaqueOpenTypes: true,
 	defaultWildcardImports: false,
 	generateFromImpls: false,
-	language: Bindings.Rasn
+	language: Bindings.Rasn,
+	customImports: [],
+	typeAnnotations: ['#[derive(AsnType, Debug, Clone, Decode, Encode, PartialEq, Eq, Hash)]']
 };
 
 export const compilerState = writable<CompilerState>(DEFAULT);
@@ -26,7 +30,7 @@ export const compilerState = writable<CompilerState>(DEFAULT);
 export const load = () => {
 	const localCache = localStorage?.getItem('compilerState');
 	if (localCache) {
-		compilerState.set(JSON.parse(localCache));
+		compilerState.set({ ...DEFAULT, ...JSON.parse(localCache) });
 	}
 	compilerState.subscribe((value) => {
 		if (localStorage) {

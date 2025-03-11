@@ -3,7 +3,7 @@
 	import { Bindings, compilerState } from '$lib/compilerState';
 	import * as prettier from 'prettier';
 	import * as tsPlugin from 'prettier/parser-typescript';
-	import * as estreePlugin from 'prettier/plugins/estree';
+	import estreePlugin from 'prettier/plugins/estree';
 	import { onDestroy } from 'svelte';
 
 	let bindings = '';
@@ -18,10 +18,23 @@
 
 	const compile = async () => {
 		try {
-			let { input, opaqueOpenTypes, defaultWildcardImports, generateFromImpls, language } =
-				$compilerState;
+			let {
+				input,
+				opaqueOpenTypes,
+				defaultWildcardImports,
+				generateFromImpls,
+				language,
+				customImports,
+				typeAnnotations
+			} = $compilerState;
 			if (input.length === 0) return;
-			const config = new Config(opaqueOpenTypes, defaultWildcardImports, generateFromImpls);
+			const config = new Config(
+				opaqueOpenTypes,
+				defaultWildcardImports,
+				generateFromImpls,
+				customImports,
+				typeAnnotations
+			);
 			if (language === Bindings.Rasn) {
 				compileToRust(input, config);
 			} else {
@@ -44,7 +57,9 @@
 	const compileToRust = (input: string, config: Config) => {
 		const { rust, warnings } = compile_to_rust(input, config);
 		errors = warnings;
-		bindings = rustfmt(rust);
+		bindings = rustfmt(rust)
+			// fix for rustfmt bug of adding comma at the end of rasn tag annotations
+			.replace(/(\((context|private|application|universal), [0-9]+),\)/g, '$1)');
 	};
 
 	const rustfmt = (bindings: string) => {
