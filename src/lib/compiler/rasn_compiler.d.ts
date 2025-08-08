@@ -7,7 +7,7 @@ export function compile_to_rust(asn1: string, config: Config): Generated;
  */
 export class Config {
   free(): void;
-  constructor(opaque_open_types: boolean, default_wildcard_imports: boolean, generate_from_impls?: boolean | null, custom_imports?: string[] | null, type_annotations?: string[] | null);
+  constructor(opaque_open_types: boolean, default_wildcard_imports: boolean, no_std_compliant_bindings: boolean, generate_from_impls?: boolean | null, custom_imports?: string[] | null, type_annotations?: string[] | null);
   /**
    * ASN.1 Open Types are represented as the `rasn::types::Any` type,
    * which holds a binary `content`. If `opaque_open_types` is `false`,
@@ -49,6 +49,10 @@ export class Config {
    * Default: `vec![String::from("#[derive(AsnType, Debug, Clone, Decode, Encode, PartialEq, Eq, Hash)]")]`
    */
   type_annotations: string[];
+  /**
+   * Create bindings for a `no_std` environment
+   */
+  no_std_compliant_bindings: boolean;
 }
 export class Generated {
   private constructor();
@@ -80,7 +84,9 @@ export interface InitOutput {
   readonly __wbg_set_config_custom_imports: (a: number, b: number, c: number) => void;
   readonly __wbg_get_config_type_annotations: (a: number) => [number, number];
   readonly __wbg_set_config_type_annotations: (a: number, b: number, c: number) => void;
-  readonly config_new: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => number;
+  readonly __wbg_get_config_no_std_compliant_bindings: (a: number) => number;
+  readonly __wbg_set_config_no_std_compliant_bindings: (a: number, b: number) => void;
+  readonly config_new: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => number;
   readonly __wbg_generated_free: (a: number, b: number) => void;
   readonly __wbg_get_generated_rust: (a: number) => [number, number];
   readonly __wbg_set_generated_rust: (a: number, b: number, c: number) => void;

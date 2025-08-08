@@ -300,18 +300,34 @@ export class Config {
         wasm.__wbg_set_config_type_annotations(this.__wbg_ptr, ptr0, len0);
     }
     /**
+     * Create bindings for a `no_std` environment
+     * @returns {boolean}
+     */
+    get no_std_compliant_bindings() {
+        const ret = wasm.__wbg_get_config_no_std_compliant_bindings(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
+     * Create bindings for a `no_std` environment
+     * @param {boolean} arg0
+     */
+    set no_std_compliant_bindings(arg0) {
+        wasm.__wbg_set_config_no_std_compliant_bindings(this.__wbg_ptr, arg0);
+    }
+    /**
      * @param {boolean} opaque_open_types
      * @param {boolean} default_wildcard_imports
+     * @param {boolean} no_std_compliant_bindings
      * @param {boolean | null} [generate_from_impls]
      * @param {string[] | null} [custom_imports]
      * @param {string[] | null} [type_annotations]
      */
-    constructor(opaque_open_types, default_wildcard_imports, generate_from_impls, custom_imports, type_annotations) {
+    constructor(opaque_open_types, default_wildcard_imports, no_std_compliant_bindings, generate_from_impls, custom_imports, type_annotations) {
         var ptr0 = isLikeNone(custom_imports) ? 0 : passArrayJsValueToWasm0(custom_imports, wasm.__wbindgen_malloc);
         var len0 = WASM_VECTOR_LEN;
         var ptr1 = isLikeNone(type_annotations) ? 0 : passArrayJsValueToWasm0(type_annotations, wasm.__wbindgen_malloc);
         var len1 = WASM_VECTOR_LEN;
-        const ret = wasm.config_new(opaque_open_types, default_wildcard_imports, isLikeNone(generate_from_impls) ? 0xFFFFFF : generate_from_impls ? 1 : 0, ptr0, len0, ptr1, len1);
+        const ret = wasm.config_new(opaque_open_types, default_wildcard_imports, no_std_compliant_bindings, isLikeNone(generate_from_impls) ? 0xFFFFFF : generate_from_impls ? 1 : 0, ptr0, len0, ptr1, len1);
         this.__wbg_ptr = ret >>> 0;
         ConfigFinalization.register(this, this.__wbg_ptr, this);
         return this;
