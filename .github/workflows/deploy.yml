@@ -28,7 +28,6 @@ jobs:
           target: wasm32-unknown-unknown
 
       - name: Checkout Pages Src
-        uses: actions/checkout@v4
         with:
           ref: main
           path: $HOME/web
@@ -45,7 +44,7 @@ jobs:
         run: |
           cargo build -p rasn-compiler --target wasm32-unknown-unknown --release    
           cargo install -f wasm-bindgen-cli --version 0.2.92
-          wasm-bindgen --out-dir $HOME/web/src/lib/compiler --target web ./target/wasm32-unknown-unknown/release/rasn_compiler.wasm
+          wasm-bindgen --out-dir $HOME/web/src/lib/compiler --target web ./target/wasm32-unknown-unknown/release/librasn_compiler.wasm
 
       - name: Install Page Dependencies
         working-directory: $HOME/web
