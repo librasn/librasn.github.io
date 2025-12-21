@@ -51,6 +51,14 @@
 				</blockquote>
 			</div>
 			<div class="flex flex-row">
+				<span>Create bindings for <code>no_std</code> environments</span>
+				<SlideToggle
+					name="slide"
+					class="ml-4"
+					bind:checked={$compilerState.noStdCompliantBindings}
+				/>
+			</div>
+			<div class="flex flex-row">
 				<span>Default Wildcard Imports</span>
 				<SlideToggle
 					name="slide"

@@ -22,6 +22,7 @@
 				input,
 				opaqueOpenTypes,
 				defaultWildcardImports,
+				noStdCompliantBindings,
 				generateFromImpls,
 				language,
 				customImports,
@@ -31,6 +32,7 @@
 			const config = new Config(
 				opaqueOpenTypes,
 				defaultWildcardImports,
+				noStdCompliantBindings,
 				generateFromImpls,
 				customImports,
 				typeAnnotations

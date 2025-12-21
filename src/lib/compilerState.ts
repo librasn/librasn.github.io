@@ -13,6 +13,7 @@ interface CompilerState {
 	language: Bindings;
 	customImports: string[];
 	typeAnnotations: string[];
+	noStdCompliantBindings: boolean;
 }
 
 const DEFAULT = {
@@ -20,6 +21,7 @@ const DEFAULT = {
 	opaqueOpenTypes: true,
 	defaultWildcardImports: false,
 	generateFromImpls: false,
+	noStdCompliantBindings: false,
 	language: Bindings.Rasn,
 	customImports: [],
 	typeAnnotations: ['#[derive(AsnType, Debug, Clone, Decode, Encode, PartialEq, Eq, Hash)]']
